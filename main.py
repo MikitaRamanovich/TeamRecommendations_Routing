@@ -152,25 +152,25 @@ def generate_recommendation(context: str, question: str):
 @task
 def generate_combined(context: str, question: str):
     prompt = (
-        "You are an expert project analyst. Analyze the following project description:\n"
-        f"{context}\n\n"
-        "Based on your analysis, provide both a concise summary of the project and a detailed team recommendation. "
-        "For the team recommendation, include, for each recommendation, the following fields: "
-        "'role', 'techstack' (as a list), 'experience', and 'rationale'.\n\n"
-        "Return your answer as a JSON object exactly matching the following structure:\n\n"
-        "{\n"
+        "You are an expert project analyst. Analyze the following project description "
+        "and provide a recommendation for the necessary team composition to develop this project. "
+        "Based on the following project description:\n"
+        "{context}\n\n"
+        "Answer the following question:\n"
+        "{question}\n\n"
+        "Generate a response in valid JSON format with the following structure exactly, and return only the JSON object without any additional text or markdown formatting:\n\n"
+        "{{\n"
         '  "project_description": "<a concise summary of the project>",\n'
         '  "team_recommendation": [\n'
-        "    {\n"
+        "    {{\n"
         '      "role": "<role name>",\n'
         '      "techstack": [<list of technologies>],\n'
         '      "experience": "<required experience>",\n'
         '      "rationale": "<reasoning behind the recommendation>"\n'
-        "    },\n"
+        "    }},\n"
         "    ...\n"
         "  ]\n"
-        "}\n\n"
-        f"Answer the following question: {question}"
+        "}}"
     )
     return llm.invoke([HumanMessage(content=prompt)]).content
 
